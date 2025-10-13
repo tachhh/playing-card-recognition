@@ -59,11 +59,11 @@ class CardCNN(nn.Module):
         return x
 
 # Load Model
-print("🎴 Playing Card Recognition - Real-time Camera")
+print("Playing Card Recognition - Real-time Camera")
 print("=" * 60)
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-print(f"🖥️  Using device: {device}")
+print(f"Using device: {device}")
 
 # Load class mapping
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -81,9 +81,9 @@ model.load_state_dict(torch.load(os.path.join(script_dir, 'models', 'card_classi
 model.to(device)
 model.eval()
 
-print(f"✅ Model loaded successfully!")
-print(f"📊 Number of classes: {num_classes}")
-print(f"🎯 Model accuracy: 81.89%")
+print(f"Model loaded successfully!")
+print(f"Number of classes: {num_classes}")
+print(f"Model accuracy: 93.58%")
 print()
 
 # Transform for preprocessing
@@ -174,7 +174,7 @@ def predict_card(image_rgb):
         return predicted_class, confidence_score
 
 # Main Camera Loop
-print("📷 Starting camera...")
+print("Starting camera...")
 print("Controls:")
 print("  - Press 'q' to quit")
 print("  - Press 's' to save current frame")
@@ -185,7 +185,7 @@ print()
 # Try multiple camera indices
 cap = None
 for camera_index in [0, 1, 2]:
-    print(f"🔍 Trying camera index {camera_index}...")
+    print(f"Trying camera index {camera_index}...")
     temp_cap = cv2.VideoCapture(camera_index, cv2.CAP_DSHOW)  # Use DirectShow backend
     
     if temp_cap.isOpened():
@@ -193,15 +193,15 @@ for camera_index in [0, 1, 2]:
         ret, test_frame = temp_cap.read()
         if ret:
             cap = temp_cap
-            print(f"✅ Camera {camera_index} opened successfully!")
+            print(f"Camera {camera_index} opened successfully!")
             break
         else:
             temp_cap.release()
     
 if cap is None or not cap.isOpened():
     print("\n" + "=" * 60)
-    print("❌ Error: Could not open any camera!")
-    print("\n💡 Troubleshooting:")
+    print("Error: Could not open any camera!")
+    print("\nTroubleshooting:")
     print("  1. Check if camera is connected")
     print("  2. Close other apps using camera (Zoom, Teams, Skype)")
     print("  3. Check camera permissions in Windows Settings")
@@ -215,8 +215,8 @@ cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 cap.set(cv2.CAP_PROP_FPS, 30)
 
-print(f"📹 Camera resolution: {int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))}x{int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))}")
-print(f"🎬 FPS: {int(cap.get(cv2.CAP_PROP_FPS))}")
+print(f"Camera resolution: {int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))}x{int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))}")
+print(f"FPS: {int(cap.get(cv2.CAP_PROP_FPS))}")
 print()
 
 saved_count = 0
@@ -230,10 +230,10 @@ while True:
     ret, frame = cap.read()
     if not ret:
         frame_error_count += 1
-        print(f"⚠️  Warning: Could not read frame! (Error {frame_error_count}/{max_frame_errors})")
+        print(f"Warning: Could not read frame! (Error {frame_error_count}/{max_frame_errors})")
         
         if frame_error_count >= max_frame_errors:
-            print("\n❌ Too many frame read errors. Camera may have disconnected.")
+            print("\nToo many frame read errors. Camera may have disconnected.")
             break
         
         time.sleep(0.1)
@@ -368,7 +368,7 @@ while True:
     key = cv2.waitKey(1) & 0xFF
     
     if key == ord('q'):
-        print("\n👋 Exiting...")
+        print("\nExiting...")
         break
     elif key == ord('s'):
         # Create captured_cards folder if it doesn't exist
@@ -380,14 +380,14 @@ while True:
         filepath = os.path.join(capture_dir, filename)
         cv2.imwrite(filepath, frame)
         saved_count += 1
-        print(f"✅ Saved: {filepath} (Total: {saved_count})")
+        print(f"Saved: {filepath} (Total: {saved_count})")
     elif key == ord('f'):
         predict_whole_frame = not predict_whole_frame
         mode = "Full Frame" if predict_whole_frame else "Auto Detect"
-        print(f"🔄 Switched to {mode} mode")
+        print(f"Switched to {mode} mode")
 
 # Cleanup
-print("\n🧹 Cleaning up...")
+print("\nCleaning up...")
 if cap:
     cap.release()
 cv2.destroyAllWindows()
@@ -396,9 +396,9 @@ cv2.destroyAllWindows()
 time.sleep(0.5)
 
 print("\n" + "=" * 60)
-print(f"✅ Program ended successfully")
-print(f"📸 Total images saved: {saved_count}")
+print(f"Program ended successfully")
+print(f"Total images saved: {saved_count}")
 if saved_count > 0:
     capture_dir = os.path.join(script_dir, 'captured_cards')
-    print(f"📁 Images saved in: {capture_dir}")
+    print(f"Images saved in: {capture_dir}")
 print("=" * 60)

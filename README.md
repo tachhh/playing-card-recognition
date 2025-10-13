@@ -1,16 +1,16 @@
-# 🎴 Playing Card Recognition System
+# Playing Card Recognition System
 
 A computer vision system that detects and classifies 53 types of playing cards in real-time using CNN deep learning with **93.58% accuracy**.
 
-## ✨ Features
-- ✅ Real-time card recognition (30 FPS)
-- ✅ 93.58% validation accuracy
-- ✅ CNN with 26M parameters
-- ✅ Fixed Frame detection mode (stable & fast)
-- ✅ Easy-to-use batch launchers
-- ✅ Comprehensive documentation
+## Features
+- Real-time card recognition (30 FPS)
+- 93.58% validation accuracy
+- CNN with 26M parameters
+- Fixed Frame detection mode (stable & fast)
+- Easy-to-use batch launchers
+- Comprehensive documentation
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Option 1: Double-click to run (Easiest!)
 ```
@@ -35,7 +35,7 @@ python test_real_image.py
 python quick_model_test.py
 ```
 
-## 📋 Requirements
+## Requirements
 - Python 3.11+
 - PyTorch
 - OpenCV (cv2)
@@ -43,7 +43,7 @@ python quick_model_test.py
 - PIL (Pillow)
 - NumPy
 
-## 🔧 Installation
+## Installation
 ```bash
 git clone https://github.com/tachhh/playing-card-recognition.git
 cd playing-card-recognition
@@ -61,7 +61,7 @@ pip install -r requirements.txt
 python download_dataset.py
 ```
 
-## 📁 Project Structure
+## Project Structure
 ```
 playing-card-recognition/
 ├── camera_simple.py          # Main camera app (93.58% accuracy)
@@ -86,7 +86,7 @@ playing-card-recognition/
 ├── captured_cards/
 │   └── README.md                     # Saved images folder
 │
-└── docs/                             # 📚 All Documentation
+└── docs/                             # All Documentation
     ├── PROJECT_HISTORY.md            # Development history
     ├── LINEAR_ALGEBRA_GUIDE.md       # Math theory & problems
     ├── DIAGNOSIS_COMPLETE.md         # Problem solving guide
@@ -98,7 +98,7 @@ playing-card-recognition/
     └── SETUP_FIXED.md                # Setup guide
 ```
 
-## 🎯 Model Performance
+## Model Performance
 - **Validation Accuracy**: 93.58%
 - **Train Accuracy**: 85.69%
 - **Real Image Test**: 90% (9/10 correct)
@@ -106,22 +106,22 @@ playing-card-recognition/
 - **Speed**: 30 FPS
 - **Classes**: 53 card types
 
-## 📚 Documentation
+## Documentation
 
 ### Main Documentation (in `docs/` folder):
-- 📖 **[PROJECT_HISTORY.md](docs/PROJECT_HISTORY.md)** - Complete development journey from 0% to 93.58%
-- 📐 **[LINEAR_ALGEBRA_GUIDE.md](docs/LINEAR_ALGEBRA_GUIDE.md)** - 10 Linear Algebra theories used in this project
-- 🔧 **[DIAGNOSIS_COMPLETE.md](docs/DIAGNOSIS_COMPLETE.md)** - Problem diagnosis and solutions
-- 📦 **[MODEL_MANAGEMENT.md](docs/MODEL_MANAGEMENT.md)** - How to manage trained models
+- **[PROJECT_HISTORY.md](docs/PROJECT_HISTORY.md)** - Complete development journey from 0% to 93.58%
+- **[LINEAR_ALGEBRA_GUIDE.md](docs/LINEAR_ALGEBRA_GUIDE.md)** - 10 Linear Algebra theories used in this project
+- **[DIAGNOSIS_COMPLETE.md](docs/DIAGNOSIS_COMPLETE.md)** - Problem diagnosis and solutions
+- **[MODEL_MANAGEMENT.md](docs/MODEL_MANAGEMENT.md)** - How to manage trained models
 
 ### Additional Guides:
-- 📝 **[ADDING_DATASET.md](docs/ADDING_DATASET.md)** - Add your own card images
-- 🔄 **[AFTER_MERGE.md](docs/AFTER_MERGE.md)** - After merging datasets
-- 📥 **[HOW_TO_ADD_DATASET.md](docs/HOW_TO_ADD_DATASET.md)** - Dataset instructions
-- ⚡ **[LOW_CONFIDENCE_FIX.md](docs/LOW_CONFIDENCE_FIX.md)** - Fix low confidence issues
-- ⚙️ **[SETUP_FIXED.md](docs/SETUP_FIXED.md)** - Initial setup guide
+- **[ADDING_DATASET.md](docs/ADDING_DATASET.md)** - Add your own card images
+- **[AFTER_MERGE.md](docs/AFTER_MERGE.md)** - After merging datasets
+- **[HOW_TO_ADD_DATASET.md](docs/HOW_TO_ADD_DATASET.md)** - Dataset instructions
+- **[LOW_CONFIDENCE_FIX.md](docs/LOW_CONFIDENCE_FIX.md)** - Fix low confidence issues
+- **[SETUP_FIXED.md](docs/SETUP_FIXED.md)** - Initial setup guide
 
-## 🧮 Mathematical Foundation
+## Mathematical Foundation
 This project employs Linear Algebra concepts (see [docs/LINEAR_ALGEBRA_GUIDE.md](docs/LINEAR_ALGEBRA_GUIDE.md)):
 1. **Vectors** - Bias vectors, image representation
 2. **Matrices** - Weight matrices, transformations
@@ -130,24 +130,24 @@ This project employs Linear Algebra concepts (see [docs/LINEAR_ALGEBRA_GUIDE.md]
 5. **Linear Transformations** - Normalization, activation
 6. **Gaussian Blur** - Noise reduction
 
-## 🎓 Key Learnings
+## Key Learnings
 1. **Dataset Quality Matters**: Kaggle dataset (93.58%) >> merged_dataset (65.28%)
 2. **Learning Rate is Critical**: 0.0001 >> 0.001 (28% accuracy difference)
 3. **More Epochs Needed**: 50 epochs >> 30 epochs
 4. **Fixed Frame > Auto Detection**: More stable, faster, more accurate
 
-## 🙏 Credits
+## Credits
 - **Dataset**: [Kaggle Cards Image Dataset](https://www.kaggle.com/datasets/gpiosenka/cards-image-datasetclassification) by gpiosenka
 - **Framework**: PyTorch
 - **Author**: tachhh
 
-## 📄 License
+## License
 MIT License - see LICENSE file for details
 
-## 🤝 Contributing
+## Contributing
 Contributions are welcome! Please feel free to submit a Pull Request.
 
 ---
 
-**Made with ❤️ for Linear Algebra course project**  
-**Final Accuracy: 93.58% ⭐**
+**Made for Linear Algebra course project**  
+**Final Accuracy: 93.58%**
