@@ -37,6 +37,9 @@ models/training_history*.json
 # Captured images
 captured_card_*.jpg
 captured_card_*.png
+captured_cards/*.jpg
+captured_cards/*.png
+!captured_cards/README.md
 
 # IDE
 .vscode/

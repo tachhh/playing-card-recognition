@@ -371,11 +371,16 @@ while True:
         print("\n👋 Exiting...")
         break
     elif key == ord('s'):
+        # Create captured_cards folder if it doesn't exist
+        capture_dir = os.path.join(script_dir, 'captured_cards')
+        os.makedirs(capture_dir, exist_ok=True)
+        
         timestamp = time.strftime("%Y%m%d_%H%M%S")
-        filename = f"captured_card_{timestamp}.jpg"
-        cv2.imwrite(filename, frame)
+        filename = f"captured_{timestamp}.jpg"
+        filepath = os.path.join(capture_dir, filename)
+        cv2.imwrite(filepath, frame)
         saved_count += 1
-        print(f"✅ Saved: {filename} (Total: {saved_count})")
+        print(f"✅ Saved: {filepath} (Total: {saved_count})")
     elif key == ord('f'):
         predict_whole_frame = not predict_whole_frame
         mode = "Full Frame" if predict_whole_frame else "Auto Detect"
@@ -394,5 +399,6 @@ print("\n" + "=" * 60)
 print(f"✅ Program ended successfully")
 print(f"📸 Total images saved: {saved_count}")
 if saved_count > 0:
-    print(f"📁 Images saved in: {os.getcwd()}")
+    capture_dir = os.path.join(script_dir, 'captured_cards')
+    print(f"📁 Images saved in: {capture_dir}")
 print("=" * 60)

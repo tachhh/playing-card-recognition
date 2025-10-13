@@ -251,10 +251,17 @@ def main():
         if key == ord('q'):
             break
         elif key == ord('s'):
-            # Save frame
-            filename = f'captured_frame_{frame_count}.jpg'
-            cv2.imwrite(filename, frame)
-            print(f"📸 Frame saved as {filename}")
+            # Save frame to captured_cards folder
+            script_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            capture_dir = os.path.join(script_dir, 'captured_cards')
+            os.makedirs(capture_dir, exist_ok=True)
+            
+            import time
+            timestamp = time.strftime("%Y%m%d_%H%M%S")
+            filename = f'captured_{timestamp}.jpg'
+            filepath = os.path.join(capture_dir, filename)
+            cv2.imwrite(filepath, frame)
+            print(f"📸 Frame saved as {filepath}")
     
     # Cleanup
     cap.release()
