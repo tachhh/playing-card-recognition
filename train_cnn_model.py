@@ -105,13 +105,13 @@ class CardImageDataset(Dataset):
 def train_cnn_model(num_epochs=30, batch_size=32, learning_rate=0.001, device='auto'):
     """Train the CNN card classifier model"""
     
-    print("🎴 CNN Card Classifier Training")
+    print("CNN Card Classifier Training")
     print("=" * 70)
     
     # Set device
     if device == 'auto':
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    print(f"🖥️  Using device: {device}")
+    print(f"Using device: {device}")
     
     # Load dataset path
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -119,7 +119,7 @@ def train_cnn_model(num_epochs=30, batch_size=32, learning_rate=0.001, device='a
     # Use ORIGINAL dataset (better quality!)
     ref_file = os.path.join(script_dir, 'data', 'dataset_path.txt')
     if not os.path.exists(ref_file):
-        print("❌ Dataset not found. Please run 'download_dataset.py' first.")
+        print("Dataset not found. Please run 'download_dataset.py' first.")
         return
     with open(ref_file, 'r') as f:
         dataset_path = f.read().strip()
@@ -128,11 +128,11 @@ def train_cnn_model(num_epochs=30, batch_size=32, learning_rate=0.001, device='a
     # dataset_path = os.path.join(script_dir, 'data', 'merged_dataset')
     
     if not os.path.exists(dataset_path):
-        print(f"❌ Dataset not found at: {dataset_path}")
-        print("💡 Run: python download_dataset.py")
+        print(f"Dataset not found at: {dataset_path}")
+        print("Run: python download_dataset.py")
         return
     
-    print(f"📁 Dataset: {dataset_path}\n")
+    print(f"Dataset: {dataset_path}\n")
     
     # Data transforms with augmentation for training
     train_transform = transforms.Compose([
@@ -192,7 +192,7 @@ def train_cnn_model(num_epochs=30, batch_size=32, learning_rate=0.001, device='a
     best_valid_acc = 0.0
     train_history = {'train_loss': [], 'train_acc': [], 'valid_loss': [], 'valid_acc': []}
     
-    print("🚀 Starting training...")
+    print("Starting training...")
     print("=" * 70)
     
     for epoch in range(num_epochs):
@@ -289,7 +289,7 @@ def train_cnn_model(num_epochs=30, batch_size=32, learning_rate=0.001, device='a
                 'num_classes': num_classes,
             }, os.path.join(script_dir, 'models', 'card_classifier_cnn_full.pth'))
             
-            print(f'  ✅ New best model saved! (Accuracy: {best_valid_acc:.2f}%)')
+            print(f'  New best model saved! (Accuracy: {best_valid_acc:.2f}%)')
         
         print("-" * 70)
     
@@ -309,13 +309,13 @@ def train_cnn_model(num_epochs=30, batch_size=32, learning_rate=0.001, device='a
         json.dump(class_mapping, f, indent=2)
     
     print("\n" + "=" * 70)
-    print("🎉 Training Complete!")
+    print("Training Complete!")
     print("=" * 70)
-    print(f"✅ Best validation accuracy: {best_valid_acc:.2f}%")
-    print(f"📁 Model saved to: models/card_classifier_cnn.pth")
-    print(f"📊 Training history saved to: {history_file}")
-    print(f"📋 Class mapping saved to: models/class_mapping_cnn.json")
-    print("\n📝 Next step: Test the model with 'python test_cnn_model.py'")
+    print(f"Best validation accuracy: {best_valid_acc:.2f}%")
+    print(f"Model saved to: models/card_classifier_cnn.pth")
+    print(f"Training history saved to: {history_file}")
+    print(f"Class mapping saved to: models/class_mapping_cnn.json")
+    print("\nNext step: Test the model with 'python test_real_image.py'")
     
     return model, train_history, best_valid_acc
 
