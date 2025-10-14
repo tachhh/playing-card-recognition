@@ -29,10 +29,10 @@ C:\playing-card-recognition\.venv\Scripts\Activate.ps1
 python camera_simple.py
 
 # Test with real images
-python test_real_image.py
+python diagnostics/test_real_image.py
 
 # Quick model test
-python quick_model_test.py
+python diagnostics/quick_model_test.py
 ```
 
 ## Requirements
@@ -66,36 +66,36 @@ python download_dataset.py
 playing-card-recognition/
 ├── camera_simple.py          # Main camera app (93.58% accuracy)
 ├── train_cnn_model.py        # Training script
-├── test_real_image.py        # Test with real images
-├── quick_model_test.py       # Quick model test
-├── diagnose_inference.py     # Diagnose issues
 ├── download_dataset.py       # Download Kaggle dataset
 ├── start.bat                 # Main menu launcher
 ├── run_camera.bat            # Quick camera launcher
 ├── requirements.txt          # Python dependencies
 ├── README.md                 # This file
 │
+├── diagnostics/                      # Debug & Testing Tools
+│   ├── diagnose_inference.py        # Comprehensive diagnostic
+│   ├── quick_model_test.py          # Quick model test
+│   └── test_real_image.py           # Test with real images
+│
 ├── models/
-│   ├── card_classifier_cnn.pth       # Trained model (93.58%)
-│   ├── class_mapping_cnn.json        # Class mapping
-│   └── training_history_*.json       # Training history
+│   ├── card_classifier_cnn.pth      # Trained model (93.58%)
+│   ├── class_mapping_cnn.json       # Class mapping
+│   └── training_history_*.json      # Training history
 │
 ├── data/
-│   └── dataset_path.txt              # Dataset location
+│   └── dataset_path.txt             # Dataset location
 │
 ├── captured_cards/
-│   └── README.md                     # Saved images folder
+│   └── README.md                    # Saved images folder
 │
-└── docs/                             # All Documentation
-    ├── PROJECT_HISTORY.md            # Development history
-    ├── LINEAR_ALGEBRA_GUIDE.md       # Math theory & problems
-    ├── DIAGNOSIS_COMPLETE.md         # Problem solving guide
-    ├── MODEL_MANAGEMENT.md           # Model management
-    ├── ADDING_DATASET.md             # Add custom dataset
-    ├── AFTER_MERGE.md                # Merge dataset guide
-    ├── HOW_TO_ADD_DATASET.md         # Dataset instructions
-    ├── LOW_CONFIDENCE_FIX.md         # Fix low confidence
-    └── SETUP_FIXED.md                # Setup guide
+└── docs/                            # All Documentation
+    ├── PROJECT_HISTORY.md           # Development history
+    ├── CAMERA_GUIDE.md              # Camera operations guide
+    ├── IMAGE_PROCESSING_LINEAR_ALGEBRA.md  # Image processing math
+    ├── TRAINING_GUIDE.md            # Model training guide
+    ├── DIAGNOSIS_COMPLETE.md        # Problem solving guide
+    ├── MODEL_MANAGEMENT.md          # Model management
+    └── ...                          # Other guides
 ```
 
 ## Model Performance

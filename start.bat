@@ -57,7 +57,7 @@ echo ========================================
 echo.
 cd /d C:\playing-card-recognition\playing-card-recognition
 call C:\playing-card-recognition\.venv\Scripts\activate.bat
-python test_real_image.py
+python diagnostics\test_real_image.py
 call C:\playing-card-recognition\.venv\Scripts\deactivate.bat
 echo.
 pause
@@ -71,7 +71,7 @@ echo ========================================
 echo.
 cd /d C:\playing-card-recognition\playing-card-recognition
 call C:\playing-card-recognition\.venv\Scripts\activate.bat
-python quick_model_test.py
+python diagnostics\quick_model_test.py
 call C:\playing-card-recognition\.venv\Scripts\deactivate.bat
 echo.
 pause

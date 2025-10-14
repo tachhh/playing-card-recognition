@@ -32,10 +32,10 @@
 ```
 
 **การวินิจฉัย:**
-- สร้าง diagnostic tools 3 ตัว:
-  1. `diagnose_inference.py` - ทดสอบ 6 ด้าน
-  2. `quick_model_test.py` - ทดสอบด้วย random inputs
-  3. `test_real_image.py` - ทดสอบด้วยรูปจริง
+- สร้าง diagnostic tools 3 ตัว (อยู่ใน `diagnostics/`):
+  1. `diagnostics/diagnose_inference.py` - ทดสอบ 6 ด้าน
+  2. `diagnostics/quick_model_test.py` - ทดสอบด้วย random inputs
+  3. `diagnostics/test_real_image.py` - ทดสอบด้วยรูปจริง
 
 **ผลการวินิจฉัย:**
 ```
@@ -341,9 +341,10 @@ playing-card-recognition/
 ├── captured_cards/                      # Captured images
 ├── camera_simple.py                     # Simple camera script
 ├── train_cnn_model.py                   # Training script
-├── diagnose_inference.py                # Diagnostic tool
-├── quick_model_test.py                  # Quick test tool
-├── test_real_image.py                   # Real image test
+├── diagnostics/                         # Debug & Testing Tools
+│   ├── diagnose_inference.py           # Diagnostic tool
+│   ├── quick_model_test.py             # Quick test tool
+│   └── test_real_image.py              # Real image test
 ├── LOW_CONFIDENCE_FIX.md                # Troubleshooting guide
 ├── DIAGNOSIS_COMPLETE.md                # Diagnosis summary
 ├── PROJECT_HISTORY.md                   # This document
@@ -366,13 +367,13 @@ python train_cnn_model.py
 ### 2. Test Model
 ```bash
 # Quick test with random inputs
-python quick_model_test.py
+python diagnostics/quick_model_test.py
 
 # Test with real images
-python test_real_image.py
+python diagnostics/test_real_image.py
 
 # Comprehensive diagnostics
-python diagnose_inference.py
+python diagnostics/diagnose_inference.py
 ```
 
 ### 3. Run Camera Detection

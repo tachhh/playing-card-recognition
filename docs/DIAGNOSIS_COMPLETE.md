@@ -125,7 +125,7 @@ Epoch 50/50 Summary:
 
 #### Test 1: Quick Model Test
 ```bash
-python quick_model_test.py
+python diagnostics/quick_model_test.py
 ```
 
 **ผลลัพธ์:**
@@ -137,7 +137,7 @@ python quick_model_test.py
 
 #### Test 2: Real Image Test
 ```bash
-python test_real_image.py
+python diagnostics/test_real_image.py
 ```
 
 **ผลลัพธ์:**
@@ -337,8 +337,8 @@ Epoch Range | Train Acc | Valid Acc | Time   | Status
 
 ```bash
 # 1. วินิจฉัยปัญหา
-python diagnose_inference.py       # ตรวจสอบ dataset
-python quick_model_test.py         # ทดสอบโมเดล → พบ confidence ต่ำ
+python diagnostics/diagnose_inference.py       # ตรวจสอบ dataset
+python diagnostics/quick_model_test.py         # ทดสอบโมเดล → พบ confidence ต่ำ
 
 # 2. ดาวน์โหลด dataset ใหม่
 python download_dataset.py         # Kaggle Cards dataset
@@ -350,7 +350,7 @@ python train_cnn_model.py          # LR=0.001 → ได้ 65%
 python train_cnn_model.py          # LR=0.0001 → ได้ 93.58% ✅
 
 # 5. ทดสอบผลลัพธ์
-python test_real_image.py          # 9/10 correct
+python diagnostics/test_real_image.py          # 9/10 correct
 python camera_simple.py            # 30 FPS, stable
 ```
 
@@ -364,7 +364,7 @@ python camera_simple.py
 python app/run_camera_cnn.py
 
 # ทดสอบรูปไพ่ที่บันทึกไว้
-python test_real_image.py
+python diagnostics/test_real_image.py
 
 # ดู captured images
 dir captured_cards\
