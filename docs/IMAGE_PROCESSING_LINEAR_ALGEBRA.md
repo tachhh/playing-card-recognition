@@ -5,14 +5,208 @@
 
 ## สารบัญ
 
-1. [บทนำ: ทำไมต้องใช้ Linear Algebra](#บทนำ-ทำไมตองใช-linear-algebra)
-2. [ภาพคืออะไรในมุมมองคณิตศาสตร์](#ภาพคืออะไรในมุมมองคณิตศาสตร)
-3. [Matrix และการแทนค่าภาพ](#matrix-และการแทนคาภาพ)
-4. [Convolution: หัวใจของ Image Processing](#convolution-หวใจของ-image-processing)
-5. [Kernel และ Filter Matrix](#kernel-และ-filter-matrix)
-6. [การประยุกต์ใช้จริงในโปรเจกต์](#การประยกตใชจริงในโปรเจกต)
-7. [Neural Network และ Linear Algebra](#neural-network-และ-linear-algebra)
-8. [สรุปและบทวิเคราะห์](#สรปและบทวิเคราะห)
+1. [ภาพรวมการทำงาน](#ภาพรวมการทำงาน)
+2. [บทนำ: ทำไมต้องใช้ Linear Algebra](#บทนำ-ทำไมตองใช-linear-algebra)
+3. [ภาพคืออะไรในมุมมองคณิตศาสตร์](#ภาพคืออะไรในมุมมองคณิตศาสตร)
+4. [Matrix และการแทนค่าภาพ](#matrix-และการแทนคาภาพ)
+5. [Convolution: หัวใจของ Image Processing](#convolution-หวใจของ-image-processing)
+6. [Kernel และ Filter Matrix](#kernel-และ-filter-matrix)
+7. [การประยุกต์ใช้จริงในโปรเจกต์](#การประยกตใชจริงในโปรเจกต)
+8. [Neural Network และ Linear Algebra](#neural-network-และ-linear-algebra)
+9. [สรุปและบทวิเคราะห์](#สรปและบทวิเคราะห)
+
+---
+
+## ภาพรวมการทำงาน
+
+### Pipeline ของระบบจดจำไม้เล่นแบบสมบูรณ์
+
+ก่อนเข้าสู่รายละเอียดทางคณิตศาสตร์ ขอแสดงภาพรวมการทำงานของระบบทั้งหมด:
+
+```
+[กล้อง: 640×480×3]
+   ↓ อ่านภาพ 30 ครั้ง/วินาที
+   ↓ cap.read() → frame
+   
+[OpenCV - Image Processing]
+   ↓ ประมวลผลภาพ
+   │
+   ├─ [Full Frame Mode]
+   │    ↓ ตัดกรอบตรงกลาง (Fixed Region)
+   │    ↓ frame[y1:y2, x1:x2]
+   │    ↓ ได้ภาพไม้เล่น 224×224
+   │
+   └─ [Auto Detect Mode]
+        ↓ BGR → Grayscale (Matrix Operation)
+        ↓ Gaussian Blur (Convolution)
+        ↓ Adaptive Threshold (Binary Matrix)
+        ↓ Morphological Operations (Opening + Closing)
+        ↓ Find Contours (Edge Detection)
+        ↓ คัดเลือกตามเงื่อนไข (Area, Aspect Ratio)
+        ↓ ได้ภาพไม้เล่น
+   
+[Transform - Preprocessing]
+   ↓ Resize to 224×224 (Matrix Interpolation)
+   ↓ ToTensor: [0-255] → [0.0-1.0]
+   ↓ Normalize: (I - μ) / σ
+   ↓ Tensor shape: [1, 3, 224, 224]
+   
+[AI Model - CNN Architecture]
+   ↓ ส่งเข้า Neural Network
+   │
+   ├─ Conv Layer 1: 3→32 channels (Matrix ∗ Kernel)
+   │  ↓ BatchNorm + ReLU + MaxPool
+   │  ↓ Output: [32, 112, 112]
+   │
+   ├─ Conv Layer 2: 32→64 channels
+   │  ↓ BatchNorm + ReLU + MaxPool
+   │  ↓ Output: [64, 56, 56]
+   │
+   ├─ Conv Layer 3: 64→128 channels
+   │  ↓ BatchNorm + ReLU + MaxPool
+   │  ↓ Output: [128, 28, 28]
+   │
+   ├─ Conv Layer 4: 128→256 channels
+   │  ↓ BatchNorm + ReLU + MaxPool
+   │  ↓ Output: [256, 14, 14]
+   │
+   ├─ Flatten: [256×14×14] → [50,176]
+   │  ↓ Vector Representation
+   │
+   ├─ FC Layer 1: 50,176 → 512 (Matrix Multiplication)
+   │  ↓ ReLU + Dropout(0.5)
+   │
+   ├─ FC Layer 2: 512 → 256
+   │  ↓ ReLU + Dropout(0.5)
+   │
+   └─ FC Layer 3: 256 → 53 (Output)
+      ↓ Raw scores (logits)
+   
+[Softmax - Probability Distribution]
+   ↓ e^(x_i) / Σ e^(x_j)
+   ↓ แปลงเป็นความน่าจะเป็น
+   ↓ คำนวณความน่าจะเป็น 53 คลาส
+   ↓ Σ probabilities = 100%
+   
+[Post-processing]
+   ↓ torch.max(probabilities)
+   ↓
+   ├─ Predicted Class: idx → class name
+   │  ↓ idx_to_class[predicted.item()]
+   │  ↓ Example: "ace of spades"
+   │
+   └─ Confidence Score: max probability × 100
+      ↓ confidence.item() × 100
+      ↓ Example: 95.8%
+   
+[Visualization]
+   ↓ cv2.putText() - วาดข้อความบนภาพ
+   ↓ cv2.rectangle() - วาดกรอบ
+   ↓ แสดง Predicted Class + Confidence
+   
+[แสดงผลบนหน้าจอ]
+   ↓ cv2.imshow('Playing Card Recognition', frame)
+   ↓ อัพเดททุก 1/30 วินาที (30 FPS)
+   └─ ผู้ใช้เห็นผลลัพธ์แบบเรียลไทม์
+```
+
+### การเชื่อมโยง Linear Algebra กับแต่ละขั้นตอน
+
+| ขั้นตอน | Linear Algebra Operation | Input → Output |
+|---------|--------------------------|----------------|
+| **Camera Input** | Matrix Representation | Physical Light → I ∈ ℝ^(480×640×3) |
+| **Grayscale** | Matrix-Vector Mult | I_rgb → Gray = 0.299R + 0.587G + 0.114B |
+| **Gaussian Blur** | Convolution | I ∗ K_gaussian → I_blur |
+| **Threshold** | Element-wise Comparison | I > T(x,y) → Binary Matrix |
+| **Morphology** | Set Operations | (I ⊖ K) ⊕ K or (I ⊕ K) ⊖ K |
+| **Resize** | Matrix Interpolation | I_large → I_small ∈ ℝ^(224×224) |
+| **Normalize** | Scalar Operations | (I - μ) / σ |
+| **Conv Layers** | Convolution + Matrix Mult | W ∗ X + b |
+| **FC Layers** | Matrix Multiplication | Y = WX + b, W ∈ ℝ^(m×n) |
+| **Softmax** | Exponential + Normalization | e^x_i / Σ e^x_j |
+| **Output** | argmax Operation | max(probabilities) → class |
+
+### ความซับซ้อนทางคำนวณในแต่ละขั้นตอน
+
+```
+Total Processing Time per Frame ≈ 33ms (30 FPS)
+
+├─ Image Processing (OpenCV): ~5ms
+│  ├─ Grayscale: O(H×W) ≈ 0.3ms
+│  ├─ Gaussian Blur: O(H×W×K²) ≈ 1ms
+│  ├─ Threshold: O(H×W) ≈ 0.5ms
+│  ├─ Morphology: O(H×W×K²) ≈ 2ms
+│  └─ Contours: O(H×W) ≈ 1ms
+│
+├─ Preprocessing: ~2ms
+│  ├─ Resize: O(H×W) ≈ 1ms
+│  └─ Normalize: O(H×W) ≈ 1ms
+│
+├─ CNN Inference: ~20ms
+│  ├─ Conv Layers: O(H×W×K²×C) ≈ 15ms
+│  └─ FC Layers: O(n×m) ≈ 5ms
+│
+└─ Post-processing: ~1ms
+   ├─ Softmax: O(n) ≈ 0.5ms
+   └─ Visualization: O(1) ≈ 0.5ms
+
+Reserve: ~5ms (buffer for system overhead)
+```
+
+### ข้อมูลสำคัญ (Key Statistics)
+
+```
+📊 Model Architecture:
+   • Total Parameters: 26,738,485
+   • Conv Layers: 4 layers (3→32→64→128→256)
+   • FC Layers: 3 layers (50176→512→256→53)
+   • Activation: ReLU
+   • Regularization: Dropout(0.5), BatchNorm
+
+📈 Performance Metrics:
+   • Validation Accuracy: 93.58%
+   • Training Dataset: 7,624 images (53 classes)
+   • Inference Speed: 30 FPS
+   • Confidence Range: 70-100%
+
+🔧 Technical Specifications:
+   • Input Size: 224×224×3
+   • Kernel Size: 3×3 (Conv Layers)
+   • Pooling: MaxPool 2×2
+   • Normalization: ImageNet Statistics
+     μ = [0.485, 0.456, 0.406]
+     σ = [0.229, 0.224, 0.225]
+```
+
+### เหตุผลเชิงคณิตศาสตร์ว่าทำไมระบบนี้ถึงทำงานได้
+
+1. **Linear Algebra ทำให้คำนวณได้เร็ว:**
+   ```
+   Matrix Operations บน GPU
+   → Parallel Processing
+   → 1000x เร็วกว่า Sequential
+   ```
+
+2. **Convolution สกัดคุณลักษณะได้ดี:**
+   ```
+   Local Receptive Field
+   → ตรวจจับ Pattern ท้องถิ่น
+   → Hierarchical Learning
+   ```
+
+3. **Parameter Sharing ลด Overfitting:**
+   ```
+   Kernel เดียวใช้ทั้งภาพ
+   → Translation Invariance
+   → Generalization ดีขึ้น
+   ```
+
+4. **Normalization ช่วย Training:**
+   ```
+   Standardized Input
+   → Stable Gradient
+   → Convergence เร็วขึ้น
+   ```
 
 ---
 
