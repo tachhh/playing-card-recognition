@@ -54,7 +54,7 @@ class CardCNN(nn.Module):
         return x
 
 print("=" * 80)
-print("🧪 TEST WITH REAL TRAINING IMAGES")
+print("TEST WITH REAL TRAINING IMAGES")
 print("=" * 80)
 
 # Load model
@@ -71,14 +71,14 @@ model.eval()
 class_to_idx = class_mapping['class_to_idx']
 idx_to_class = {v: k for k, v in class_to_idx.items()}
 
-print(f"✅ Model loaded")
+print(f"Model loaded")
 
 # Load dataset path
 with open('data/dataset_path.txt', 'r') as f:
     dataset_path = f.read().strip()
 
 train_path = os.path.join(dataset_path, 'train')
-print(f"✅ Dataset: {train_path}")
+print(f"Dataset: {train_path}")
 
 # Transform
 transform = transforms.Compose([
@@ -90,7 +90,7 @@ transform = transforms.Compose([
 
 # Test with 10 random images
 print("\n" + "=" * 80)
-print("🎯 Testing with 10 REAL training images:")
+print("Testing with 10 REAL training images:")
 print("=" * 80)
 
 classes = sorted(os.listdir(train_path))
@@ -130,7 +130,7 @@ for class_name in test_classes:
             correct += 1
         total += 1
         
-        status = "✅" if is_correct else "❌"
+        status = "PASS" if is_correct else "FAIL"
         print(f"\n{status} Image: {img_name[:30]}")
         print(f"   True:      {class_name}")
         print(f"   Predicted: {predicted_class}")
@@ -144,17 +144,17 @@ for class_name in test_classes:
             print(f"      {i+1}. {pred_class}: {pred_conf:.2f}% {marker}")
 
 print("\n" + "=" * 80)
-print(f"📊 RESULTS: {correct}/{total} correct ({100*correct/total:.1f}% accuracy)")
+print(f"RESULTS: {correct}/{total} correct ({100*correct/total:.1f}% accuracy)")
 print("=" * 80)
 
 if correct == total:
-    print("\n✅✅✅ PERFECT! Model works on training images!")
+    print("\nPERFECT! Model works on training images!")
     print("If camera still gives low confidence, problem is:")
-    print("  • Domain gap (camera vs training images)")
-    print("  • Camera quality/lighting")
+    print("  - Domain gap (camera vs training images)")
+    print("  - Camera quality/lighting")
 elif correct >= total * 0.6:
-    print(f"\n⚠️  Model is learning but not great ({100*correct/total:.0f}%)")
+    print(f"\nModel is learning but not great ({100*correct/total:.0f}%)")
     print("Need more training epochs or better hyperparameters")
 else:
-    print(f"\n❌ Model is NOT learning properly ({100*correct/total:.0f}%)")
+    print(f"\nModel is NOT learning properly ({100*correct/total:.0f}%)")
     print("There's a fundamental problem with training")
