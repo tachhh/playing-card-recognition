@@ -51,34 +51,34 @@ class CardCNN(nn.Module):
         return x
 
 print("=" * 80)
-print("🧪 QUICK MODEL TEST")
+print("QUICK MODEL TEST")
 print("=" * 80)
 
 # Check if model file exists
 model_path = 'models/card_classifier_cnn.pth'
 if not os.path.exists(model_path):
-    print(f"❌ ERROR: Model file not found at {model_path}")
-    print("\n💡 Solution: Train the model first:")
+    print(f"[FAIL] ERROR: Model file not found at {model_path}")
+    print("\nSolution: Train the model first:")
     print("   python train_cnn_model.py")
     exit(1)
 
 # Check model file size
 model_size = os.path.getsize(model_path) / (1024 * 1024)  # MB
-print(f"\n📁 Model file: {model_path}")
+print(f"\nModel file: {model_path}")
 print(f"   Size: {model_size:.2f} MB")
 
 if model_size < 50:
-    print(f"   ⚠️  WARNING: Model file is very small!")
+    print(f"   [WARNING] Model file is very small!")
     print(f"   Expected: ~100-105 MB")
     print(f"   This may indicate an incomplete or corrupted model.")
 elif model_size < 90:
-    print(f"   ⚠️  WARNING: Model file seems smaller than expected")
+    print(f"   [WARNING] Model file seems smaller than expected")
     print(f"   Expected: ~100-105 MB")
 else:
-    print(f"   ✅ Model file size looks good")
+    print(f"   [PASS] Model file size looks good")
 
 # Load class mapping
-print("\n📋 Loading class mapping...")
+print("\nLoading class mapping...")
 with open('models/class_mapping_cnn.json', 'r') as f:
     class_mapping = json.load(f)
 
@@ -86,16 +86,16 @@ num_classes = class_mapping['num_classes']
 print(f"   Number of classes: {num_classes}")
 
 # Load model
-print("\n🧠 Loading model...")
+print("\nLoading model...")
 device = torch.device('cpu')
 model = CardCNN(num_classes=num_classes)
 
 try:
     state_dict = torch.load(model_path, map_location=device)
     model.load_state_dict(state_dict)
-    print("   ✅ Model loaded successfully")
+    print("   [PASS] Model loaded successfully")
 except Exception as e:
-    print(f"   ❌ Error loading model: {e}")
+    print(f"   [FAIL] Error loading model: {e}")
     exit(1)
 
 model.to(device)
@@ -106,7 +106,7 @@ total_params = sum(p.numel() for p in model.parameters())
 print(f"   Total parameters: {total_params:,}")
 
 # Test with random inputs (5 different random inputs)
-print("\n🎲 Testing with random inputs...")
+print("\nTesting with random inputs...")
 print("   (Simulating 5 different preprocessed images)")
 print("-" * 80)
 
@@ -142,36 +142,36 @@ max_confidence = max(confidence_scores)
 min_confidence = min(confidence_scores)
 
 print("\n" + "=" * 80)
-print("📊 RESULTS SUMMARY")
+print("RESULTS SUMMARY")
 print("=" * 80)
 print(f"Average max confidence: {avg_confidence:.2f}%")
 print(f"Highest confidence: {max_confidence:.2f}%")
 print(f"Lowest confidence: {min_confidence:.2f}%")
 
-print("\n💡 INTERPRETATION:")
+print("\nINTERPRETATION:")
 if avg_confidence > 50:
-    print("   ✅ EXCELLENT: Model is confident and likely well-trained")
-    print("   → Model should work well with real images")
-    print("   → If camera still gives low confidence, problem is likely:")
-    print("      • Domain gap (camera images very different from training)")
-    print("      • Camera quality/lighting issues")
+    print("   [PASS] EXCELLENT: Model is confident and likely well-trained")
+    print("   - Model should work well with real images")
+    print("   - If camera still gives low confidence, problem is likely:")
+    print("      * Domain gap (camera images very different from training)")
+    print("      * Camera quality/lighting issues")
 elif avg_confidence > 20:
-    print("   ⚠️  MODERATE: Model shows some confidence")
-    print("   → Model may be partially trained")
-    print("   → Consider training for more epochs")
-    print("   → Test with actual test set to verify accuracy")
+    print("   [WARNING] MODERATE: Model shows some confidence")
+    print("   - Model may be partially trained")
+    print("   - Consider training for more epochs")
+    print("   - Test with actual test set to verify accuracy")
 elif avg_confidence > 10:
-    print("   ⚠️  LOW: Model has weak confidence")
-    print("   → Model is undertrained")
-    print("   → Strongly recommend retraining with more epochs")
+    print("   [WARNING] LOW: Model has weak confidence")
+    print("   - Model is undertrained")
+    print("   - Strongly recommend retraining with more epochs")
 else:
-    print("   ❌ CRITICAL: Model is essentially random guessing!")
-    print("   → Model is NOT trained or loaded incorrectly")
-    print("   → MUST retrain the model:")
+    print("   [FAIL] CRITICAL: Model is essentially random guessing!")
+    print("   - Model is NOT trained or loaded incorrectly")
+    print("   - MUST retrain the model:")
     print("      python train_cnn_model.py")
 
 # Additional check: Test logits statistics
-print("\n🔬 TECHNICAL ANALYSIS:")
+print("\nTECHNICAL ANALYSIS:")
 with torch.no_grad():
     test_input = torch.randn(1, 3, 224, 224)
     logits = model(test_input)
@@ -185,43 +185,43 @@ with torch.no_grad():
     print(f"   Logits range: {logits_range:.3f}")
     
     if logits_std < 0.5:
-        print("\n   ⚠️  WARNING: Logits have very low standard deviation!")
+        print("\n   [WARNING] Logits have very low standard deviation!")
         print("   This indicates the model is not properly trained.")
         print("   A well-trained model should have logits std > 1.0")
     elif logits_std < 1.0:
-        print("\n   ⚠️  CAUTION: Logits standard deviation is lower than ideal")
+        print("\n   [WARNING] Logits standard deviation is lower than ideal")
         print("   Model may benefit from more training.")
     else:
-        print("\n   ✅ Logits statistics look healthy")
+        print("\n   [PASS] Logits statistics look healthy")
 
 print("\n" + "=" * 80)
-print("🎯 RECOMMENDATION:")
+print("RECOMMENDATION:")
 print("=" * 80)
 
 if avg_confidence < 20:
-    print("\n🚨 CRITICAL ACTION REQUIRED:")
+    print("\nCRITICAL ACTION REQUIRED:")
     print("   1. The model is NOT properly trained")
     print("   2. Run: python train_cnn_model.py")
     print("   3. Wait for 30 epochs to complete (~30-60 minutes)")
     print("   4. You should see accuracy improve to >70%")
     print("   5. Then test camera again with: python camera_simple.py")
 elif avg_confidence < 50:
-    print("\n⚠️  RECOMMENDED ACTION:")
+    print("\nRECOMMENDED ACTION:")
     print("   1. Model may be undertrained")
     print("   2. Run test_cnn_model.py to check actual accuracy on test set")
     print("   3. If test accuracy < 70%, retrain with: python train_cnn_model.py")
     print("   4. Consider training for more epochs (40-50 instead of 30)")
 else:
-    print("\n✅ MODEL IS WORKING:")
+    print("\nMODEL IS WORKING:")
     print("   1. Model appears to be properly trained")
     print("   2. If camera gives low confidence, the problem is likely:")
-    print("      • Lighting conditions in camera different from training")
-    print("      • Camera quality/focus issues")
-    print("      • Card appearance different (worn cards, different deck)")
+    print("      * Lighting conditions in camera different from training")
+    print("      * Camera quality/focus issues")
+    print("      * Card appearance different (worn cards, different deck)")
     print("   3. Solutions:")
-    print("      • Improve lighting (bright, even illumination)")
-    print("      • Hold card steady and flat")
-    print("      • Use cards similar to training data")
-    print("      • Consider retraining with augmented data")
+    print("      * Improve lighting (bright, even illumination)")
+    print("      * Hold card steady and flat")
+    print("      * Use cards similar to training data")
+    print("      * Consider retraining with augmented data")
 
 print("\n" + "=" * 80)

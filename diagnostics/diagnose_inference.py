@@ -58,7 +58,7 @@ class CardCNN(nn.Module):
 def test_preprocessing():
     """Test preprocessing pipeline"""
     print("=" * 80)
-    print("🔍 DIAGNOSTIC 1: Preprocessing Pipeline")
+    print("DIAGNOSTIC 1: Preprocessing Pipeline")
     print("=" * 80)
     
     # Training transforms (from train_cnn_model.py)
@@ -77,11 +77,11 @@ def test_preprocessing():
                            std=[0.229, 0.224, 0.225])
     ])
     
-    print("✅ Training transform:")
+    print("[PASS] Training transform:")
     print(train_transform)
-    print("\n✅ Inference transform:")
+    print("\n[PASS] Inference transform:")
     print(inference_transform)
-    print("\n✅ Transforms MATCH - OK")
+    print("\n[PASS] Transforms MATCH - OK")
     
     # Test with a sample image
     test_data_path = 'data/Cards/train'
@@ -94,7 +94,7 @@ def test_preprocessing():
             images = [f for f in os.listdir(class_path) if f.endswith(('.jpg', '.png'))]
             if images:
                 test_img_path = os.path.join(class_path, images[0])
-                print(f"\n📷 Testing with: {test_img_path}")
+                print(f"\nTesting with: {test_img_path}")
                 
                 # Load with PIL (training method)
                 pil_img = Image.open(test_img_path).convert('RGB')
@@ -107,13 +107,13 @@ def test_preprocessing():
                 
                 return True
     
-    print("⚠️  No test images found")
+    print("[WARNING] No test images found")
     return False
 
 def test_model_loading():
     """Test model loading"""
     print("\n" + "=" * 80)
-    print("🔍 DIAGNOSTIC 2: Model Loading")
+    print("DIAGNOSTIC 2: Model Loading")
     print("=" * 80)
     
     device = torch.device('cpu')
@@ -123,34 +123,34 @@ def test_model_loading():
         class_mapping = json.load(f)
     
     num_classes = class_mapping['num_classes']
-    print(f"✅ Loaded class mapping: {num_classes} classes")
+    print(f"[PASS] Loaded class mapping: {num_classes} classes")
     
     # Create model
     model = CardCNN(num_classes=num_classes)
-    print(f"✅ Created model with {num_classes} classes")
+    print(f"[PASS] Created model with {num_classes} classes")
     
     # Load weights
     try:
         state_dict = torch.load('models/card_classifier_cnn.pth', map_location=device)
         model.load_state_dict(state_dict)
-        print("✅ Loaded model weights successfully")
+        print("[PASS] Loaded model weights successfully")
         
         # Check model structure
         total_params = sum(p.numel() for p in model.parameters())
-        print(f"✅ Total parameters: {total_params:,}")
+        print(f"[PASS] Total parameters: {total_params:,}")
         
         model.eval()
-        print("✅ Model set to eval mode")
+        print("[PASS] Model set to eval mode")
         
         return model, class_mapping
     except Exception as e:
-        print(f"❌ Error loading model: {e}")
+        print(f"[FAIL] Error loading model: {e}")
         return None, None
 
 def test_class_mapping():
     """Test class mapping correctness"""
     print("\n" + "=" * 80)
-    print("🔍 DIAGNOSTIC 3: Class Mapping")
+    print("DIAGNOSTIC 3: Class Mapping")
     print("=" * 80)
     
     with open('models/class_mapping_cnn.json', 'r') as f:
@@ -159,8 +159,8 @@ def test_class_mapping():
     class_to_idx = class_mapping['class_to_idx']
     idx_to_class = {v: k for k, v in class_to_idx.items()}
     
-    print(f"✅ Number of classes: {len(class_to_idx)}")
-    print(f"\n📋 First 10 class mappings:")
+    print(f"[PASS] Number of classes: {len(class_to_idx)}")
+    print(f"\nFirst 10 class mappings:")
     for i in range(min(10, len(idx_to_class))):
         print(f"   {i}: {idx_to_class[i]}")
     
@@ -168,16 +168,16 @@ def test_class_mapping():
     max_idx = max(idx_to_class.keys())
     missing = [i for i in range(max_idx + 1) if i not in idx_to_class]
     if missing:
-        print(f"\n⚠️  WARNING: Missing indices: {missing}")
+        print(f"\n[WARNING] Missing indices: {missing}")
     else:
-        print(f"\n✅ All indices 0-{max_idx} present")
+        print(f"\n[PASS] All indices 0-{max_idx} present")
     
     return class_to_idx, idx_to_class
 
 def test_inference_pipeline(model, idx_to_class):
     """Test full inference pipeline"""
     print("\n" + "=" * 80)
-    print("🔍 DIAGNOSTIC 4: Full Inference Pipeline")
+    print("DIAGNOSTIC 4: Full Inference Pipeline")
     print("=" * 80)
     
     device = torch.device('cpu')
@@ -195,12 +195,12 @@ def test_inference_pipeline(model, idx_to_class):
     # Test with training image
     test_data_path = 'data/Cards/train'
     if not os.path.exists(test_data_path):
-        print("⚠️  Training data not found")
+        print("[WARNING] Training data not found")
         return
     
     classes = sorted(os.listdir(test_data_path))
     
-    print(f"\n🎯 Testing with 5 random training images:")
+    print(f"\nTesting with 5 random training images:")
     print("-" * 80)
     
     import random
@@ -242,7 +242,7 @@ def test_inference_pipeline(model, idx_to_class):
                 correct += 1
             total += 1
             
-            status = "✅" if is_correct else "❌"
+            status = "[PASS]" if is_correct else "[FAIL]"
             print(f"\n{status} Image: {img_name}")
             print(f"   True label:      {test_class}")
             print(f"   Predicted:       {predicted_class}")
@@ -258,39 +258,39 @@ def test_inference_pipeline(model, idx_to_class):
                 low_confidence.append((test_class, predicted_class, confidence_score))
     
     print("\n" + "-" * 80)
-    print(f"📊 Results: {correct}/{total} correct ({100*correct/total:.1f}% accuracy)")
+    print(f"Results: {correct}/{total} correct ({100*correct/total:.1f}% accuracy)")
     
     if low_confidence:
-        print(f"\n⚠️  Low confidence predictions (<50%):")
+        print(f"\n[WARNING] Low confidence predictions (<50%):")
         for true_class, pred_class, conf in low_confidence:
-            print(f"   {true_class} → {pred_class} ({conf:.1f}%)")
+            print(f"   {true_class} -> {pred_class} ({conf:.1f}%)")
     else:
-        print("\n✅ All predictions have high confidence (>50%)")
+        print("\n[PASS] All predictions have high confidence (>50%)")
 
 def test_camera_preprocessing():
     """Test camera frame preprocessing"""
     print("\n" + "=" * 80)
-    print("🔍 DIAGNOSTIC 5: Camera Frame Preprocessing")
+    print("DIAGNOSTIC 5: Camera Frame Preprocessing")
     print("=" * 80)
     
-    print("\n📷 Opening camera...")
+    print("\nOpening camera...")
     
     cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
     if not cap.isOpened():
-        print("❌ Could not open camera")
+        print("[FAIL] Could not open camera")
         return
     
-    print("✅ Camera opened")
-    print("\n📸 Capturing frame...")
+    print("[PASS] Camera opened")
+    print("\nCapturing frame...")
     
     ret, frame = cap.read()
     cap.release()
     
     if not ret:
-        print("❌ Could not capture frame")
+        print("[FAIL] Could not capture frame")
         return
     
-    print(f"✅ Frame captured: shape={frame.shape}, dtype={frame.dtype}")
+    print(f"[PASS] Frame captured: shape={frame.shape}, dtype={frame.dtype}")
     print(f"   Frame range: min={frame.min()}, max={frame.max()}, mean={frame.mean():.1f}")
     
     # Extract center region (as in camera_simple.py)
@@ -304,16 +304,16 @@ def test_camera_preprocessing():
     y2 = center_y + box_height // 2
     
     center_region = frame[y1:y2, x1:x2]
-    print(f"\n✅ Extracted center region: shape={center_region.shape}")
+    print(f"\n[PASS] Extracted center region: shape={center_region.shape}")
     
     # Convert BGR to RGB
     center_rgb = cv2.cvtColor(center_region, cv2.COLOR_BGR2RGB)
-    print(f"✅ Converted BGR → RGB")
+    print(f"[PASS] Converted BGR to RGB")
     print(f"   RGB range: min={center_rgb.min()}, max={center_rgb.max()}, mean={center_rgb.mean():.1f}")
     
     # Convert to PIL and transform
     pil_img = Image.fromarray(center_rgb)
-    print(f"✅ Converted to PIL: size={pil_img.size}, mode={pil_img.mode}")
+    print(f"[PASS] Converted to PIL: size={pil_img.size}, mode={pil_img.mode}")
     
     transform = transforms.Compose([
         transforms.Resize((224, 224)),
@@ -323,26 +323,26 @@ def test_camera_preprocessing():
     ])
     
     tensor = transform(pil_img)
-    print(f"✅ Transformed to tensor: shape={tensor.shape}")
+    print(f"[PASS] Transformed to tensor: shape={tensor.shape}")
     print(f"   Tensor range: min={tensor.min():.3f}, max={tensor.max():.3f}, mean={tensor.mean():.3f}")
     
     # Check if frame looks like noise
     std_dev = np.std(center_region)
     mean_val = np.mean(center_region)
-    print(f"\n📊 Frame statistics:")
+    print(f"\nFrame statistics:")
     print(f"   Standard deviation: {std_dev:.2f}")
     print(f"   Mean value: {mean_val:.2f}")
     
     if std_dev > 60 and 100 < mean_val < 150:
-        print("   ⚠️  WARNING: Frame appears to be NOISE/STATIC!")
+        print("   [WARNING] Frame appears to be NOISE/STATIC!")
         print("   This is likely the main problem!")
     else:
-        print("   ✅ Frame looks normal")
+        print("   [PASS] Frame looks normal")
 
 def check_model_outputs():
     """Check raw model output statistics"""
     print("\n" + "=" * 80)
-    print("🔍 DIAGNOSTIC 6: Model Output Analysis")
+    print("DIAGNOSTIC 6: Model Output Analysis")
     print("=" * 80)
     
     device = torch.device('cpu')
@@ -362,13 +362,13 @@ def check_model_outputs():
     with torch.no_grad():
         # Raw logits
         logits = model(random_input)
-        print(f"✅ Raw logits shape: {logits.shape}")
+        print(f"[PASS] Raw logits shape: {logits.shape}")
         print(f"   Logits range: min={logits.min():.3f}, max={logits.max():.3f}, mean={logits.mean():.3f}")
         print(f"   Logits std: {logits.std():.3f}")
         
         # Softmax probabilities
         probs = torch.nn.functional.softmax(logits, dim=1)
-        print(f"\n✅ Softmax probabilities:")
+        print(f"\n[PASS] Softmax probabilities:")
         print(f"   Probs range: min={probs.min():.6f}, max={probs.max():.6f}, sum={probs.sum():.6f}")
         print(f"   Max confidence: {probs.max().item() * 100:.2f}%")
         
@@ -379,18 +379,18 @@ def check_model_outputs():
             print(f"      {i+1}. {top5_conf[0][i].item() * 100:.2f}%")
         
         if logits.std() < 0.1:
-            print("\n   ⚠️  WARNING: Logits have very low variance!")
+            print("\n   [WARNING] Logits have very low variance!")
             print("   This suggests model may not be properly trained or loaded.")
         
         if probs.max() < 0.1:
-            print("\n   ⚠️  WARNING: All probabilities are very low!")
+            print("\n   [WARNING] All probabilities are very low!")
             print("   This suggests model is very uncertain (confidence distributed across many classes).")
 
 def main():
     """Run all diagnostics"""
     print("\n" + "=" * 80)
-    print("🔬 COMPREHENSIVE CAMERA INFERENCE DIAGNOSTIC")
-    print("   วิเคราะห์ปัญหา confidence ต่ำ (<10%)")
+    print("COMPREHENSIVE CAMERA INFERENCE DIAGNOSTIC")
+    print("   Analyze low confidence issue (<10%)")
     print("=" * 80)
     
     try:
@@ -414,21 +414,21 @@ def main():
         check_model_outputs()
         
         print("\n" + "=" * 80)
-        print("🏁 DIAGNOSTIC COMPLETE")
+        print("DIAGNOSTIC COMPLETE")
         print("=" * 80)
-        print("\n💡 ANALYSIS:")
-        print("   1. ถ้าทุก diagnostic ผ่าน แต่ camera ยัง confidence ต่ำ")
-        print("      → ปัญหาคือ domain gap (ภาพกล้องต่างจาก training data)")
-        print("   2. ถ้า camera frame เป็น noise/static")
-        print("      → ต้องแก้ไขกล้อง (ดู FIX_CAMERA_NOISE.md)")
-        print("   3. ถ้า model inference บน training images ได้ confidence ต่ำ")
-        print("      → ปัญหาที่ model หรือ class mapping")
-        print("   4. ถ้า logits มี variance ต่ำ")
-        print("      → model อาจโหลดไม่ถูกต้องหรือยังไม่ได้ฝึก")
+        print("\nANALYSIS:")
+        print("   1. If all diagnostics pass but camera still has low confidence")
+        print("      - Problem: domain gap (camera images differ from training data)")
+        print("   2. If camera frame is noise/static")
+        print("      - Fix camera (see FIX_CAMERA_NOISE.md)")
+        print("   3. If model inference on training images has low confidence")
+        print("      - Problem with model or class mapping")
+        print("   4. If logits have low variance")
+        print("      - Model may not be loaded correctly or not trained")
         print("=" * 80)
         
     except Exception as e:
-        print(f"\n❌ ERROR: {e}")
+        print(f"\n[ERROR] {e}")
         import traceback
         traceback.print_exc()
 

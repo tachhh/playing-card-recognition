@@ -1,6 +1,23 @@
 """
 Download Cards Image Dataset from Kaggle
-Dataset: gpiosenka/cards-image-datasetclassification
+Dataset: gpiosenka/c        print(f"[PASS] Dataset path saved to: {ref_file}")
+        
+        print("\n" + "=" * 60)
+        print("Dataset ready to use!")
+        print("=" * 60)
+        print("\nNext steps:")
+        print("1. Run 'python explore_dataset.py' to explore the data")
+        print("2. Run 'python train_model.py' to train the model")
+        
+        return path
+        
+    except Exception as e:
+        print(f"\n[FAIL] Error downloading dataset: {e}")
+        print("\nTips:")
+        print("1. Make sure you have Kaggle API credentials set up")
+        print("2. Visit: https://www.kaggle.com/docs/api")
+        print("3. Download kaggle.json and place it in: ~/.kaggle/")
+        return Noneclassification
 
 Dataset Info:
 - 7,624 training images
@@ -17,7 +34,7 @@ import shutil
 
 def download_dataset():
     """Download the cards dataset from Kaggle"""
-    print("🎴 Downloading Cards Image Dataset from Kaggle...")
+    print("Downloading Cards Image Dataset from Kaggle...")
     print("This may take a few minutes depending on your internet speed.")
     print("-" * 60)
     
@@ -25,11 +42,11 @@ def download_dataset():
         # Download latest version
         path = kagglehub.dataset_download("gpiosenka/cards-image-datasetclassification")
         
-        print("\n✅ Download completed!")
-        print(f"📁 Dataset downloaded to: {path}")
+        print("\n[PASS] Download completed!")
+        print(f"Dataset downloaded to: {path}")
         
         # Display dataset structure
-        print("\n📊 Dataset Structure:")
+        print("\nDataset Structure:")
         print("-" * 60)
         
         for root, dirs, files in os.walk(path):
@@ -52,33 +69,33 @@ def download_dataset():
                                 subdir_path = os.path.join(dir_path, subdir)
                                 file_count = len([f for f in os.listdir(subdir_path) if f.endswith('.jpg')])
                                 total_files += file_count
-                            print(f'{indent}    └─ {len(subdirs)} classes, {total_files} images total')
+                            print(f'{indent}    - {len(subdirs)} classes, {total_files} images total')
                 break
         
         # Create symbolic link or copy to data directory
         data_dir = os.path.join(os.path.dirname(__file__), 'data')
         if not os.path.exists(data_dir):
-            print(f"\n📂 Creating data directory at: {data_dir}")
+            print(f"\nCreating data directory at: {data_dir}")
             os.makedirs(data_dir, exist_ok=True)
         
         # Create a reference file
         ref_file = os.path.join(data_dir, 'dataset_path.txt')
         with open(ref_file, 'w') as f:
             f.write(path)
-        print(f"✅ Dataset path saved to: {ref_file}")
+        print(f"[PASS] Dataset path saved to: {ref_file}")
         
         print("\n" + "=" * 60)
-        print("🎉 Dataset ready to use!")
+        print("Dataset ready to use!")
         print("=" * 60)
-        print("\n📝 Next steps:")
+        print("\nNext steps:")
         print("1. Run 'python explore_dataset.py' to explore the data")
         print("2. Run 'python train_model.py' to train the model")
         
         return path
         
     except Exception as e:
-        print(f"\n❌ Error downloading dataset: {e}")
-        print("\n💡 Tips:")
+        print(f"\n Error downloading dataset: {e}")
+        print("\n Tips:")
         print("1. Make sure you have Kaggle API credentials set up")
         print("2. Visit: https://www.kaggle.com/docs/api")
         print("3. Download kaggle.json and place it in: ~/.kaggle/")

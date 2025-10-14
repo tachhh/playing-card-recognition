@@ -56,10 +56,10 @@
 │  │    ↓ BatchNorm + ReLU         │  │
 │  │    ↓ MaxPool (28×28)          │  │
 │  │    ↓ Conv4 (128→256 channels) │  │
-│  │    ↓ BatchNorm + ReLU         │  │
-│  │    ↓ MaxPool (14×14)          │  │
+│  │    ↓ Bat          │  │
 │  │    ↓ Flatten (50,176)         │  │
-│  │    ↓ FC1 (50,176→512)         │  │
+│  │    ↓ FC1 (50,176→512) chNorm + ReLU         │  │
+│  │    ↓ MaxPool (14×14)        │  │
 │  │    ↓ ReLU + Dropout(0.5)      │  │
 │  │    ↓ FC2 (512→256)            │  │
 │  │    ↓ ReLU + Dropout(0.5)      │  │
